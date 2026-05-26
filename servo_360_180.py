@@ -1,8 +1,3 @@
-Понял тебя. Ты хочешь иметь под рукой оригинальную логику, где клешня управляется временем вращения (для сервы 360), а рука — точными углами (для сервы 180).
-
-Вот этот код, который я восстановил из твоего самого первого файла. Он использует _rotate с таймерами для клешни и _set_angle_180 для руки.
-
-Python
 import uasyncio as asyncio
 from machine import Pin, PWM
 
@@ -13,7 +8,6 @@ class servo:
         self.min_us = 500
         self.max_us = 2500
         
-        # Настройка нейтрали для 360-градусной сервы
         self.stop_us = 1500 
        
         self.hook_angle = hook_angle
@@ -55,7 +49,6 @@ class servo:
             
         await asyncio.sleep(duration_sec) 
   
-        # Активный тормоз
         self._set_pulse(self.stop_us) 
         await asyncio.sleep(0.3) 
         
@@ -69,7 +62,6 @@ class servo:
  
         self.is_moving = True 
         try:
-            # --- НАСТРОЙКА ВРЕМЕНИ ---
             duration_forward = 0.07  # Время движения вперед
             duration_back = 0.04    # Время движения назад
          

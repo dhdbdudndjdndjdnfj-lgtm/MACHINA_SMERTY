@@ -66,16 +66,16 @@ class RFIDScanner:
             "grey":       (128, 128, 128)
         }
 
-        print("📡 RFID готов. Режим чтения меток NTAG активен.")
+        print("RFID готов")
 
     def start(self):
         self.enabled = True
-        print("🟢 RFID включен")
+        print("RFID включен")
 
     def stop(self):
         self.enabled = False
         self.last_text = None
-        print("🔴 RFID выключен")
+        print("RFID выключен")
         self.clear_lights()
 
     def clear_lights(self):
@@ -125,7 +125,7 @@ class RFIDScanner:
             return "error"
 
     async def run(self):
-        print("🔍 RFID задача запущена (поиск цветных меток)")
+        print("Поиск цветных меток")
 
         while True:
             try:
@@ -144,9 +144,9 @@ class RFIDScanner:
                             blockArray1 = bytearray(16) 
                             blockArray2 = bytearray(16) 
                             
-                            self.rdr.read(4, into=blockArray0)  # Читает 4, 5, 6, 7
-                            self.rdr.read(8, into=blockArray1)  # Читает 8, 9, 10, 11
-                            self.rdr.read(12, into=blockArray2) # Читает 12, 13, 14, 15
+                            self.rdr.read(4, into=blockArray0)  
+                            self.rdr.read(8, into=blockArray1) 
+                            self.rdr.read(12, into=blockArray2) 
                             
                             tag_text = self.get_exact_text([blockArray0, blockArray1, blockArray2])
                             now = time.ticks_ms()
@@ -156,17 +156,16 @@ class RFIDScanner:
                                 
                                 self.last_text = tag_text
                                 self.last_time = now
-                                print(f"📝 Прочитан текст: '{tag_text}'")
+                                print(f"Прочитан текст: '{tag_text}'")
                                 
                                 if tag_text in self.color_map:
                                     r, g, b = self.color_map[tag_text]
-                                    print(f"🎨 Включаю бегущий цвет: {tag_text} RGB({r},{g},{b})")
                                     
                                     await self.running_light(r, g, b)
                                     self.enabled = False 
                                     
                                 elif tag_text != "empty" and tag_text != "error":
-                                    print("❌ Неизвестный цвет!")
+                                    print("Неизвестный цвет")
                                     await self.running_light(139, 69, 19)
                                     self.enabled = False 
                                     

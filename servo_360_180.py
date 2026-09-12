@@ -41,7 +41,7 @@ class servo:
         self._set_pulse(0) 
     
     async def _rotate(self, direction, duration_sec):
-        # Логика для 360-градусной сервы
+        #Логика для 360-градусной сервы
         if direction > 0:
             self._set_pulse(2000) 
         else:
@@ -55,7 +55,7 @@ class servo:
         self._set_pulse(0) 
     
     async def simple_angle(self):
-        # Логика 360 (Клешня)
+        #Логика 360 (Клешня)
         if self.is_moving:
             print("⏳ Игнор: клешня еще работает!")
             return
@@ -66,24 +66,20 @@ class servo:
             duration_back = 0.04    # Время движения назад
          
             if self._relative_state:
-                # ПОВОРОТ НАЗАД
-                print(f"Кручу назад ({duration_back} сек)")
+                #ПОВОРОТ НАЗАД
                 await self._rotate(-1, duration_back)
                 self._relative_state = False
             else:
-                # ПОВОРОТ ВПЕРЕД
-                print(f"Кручу вперед ({duration_forward} сек)")
+                #ПОВОРОТ ВПЕРЕД
                 await self._rotate(1, duration_forward)
                 self._relative_state = True
                 
-            print("Поворот клешни завершен")
         finally:
             self.is_moving = False 
     
     async def step_angle(self):
-        # Логика 180 (Рука)
+        #Логика 180 (Рука)
         if self.is_moving:
-            print("⏳ Игнор: рука еще в движении!")
             return
             
         self.is_moving = True 
@@ -97,11 +93,10 @@ class servo:
                 else:
                     target = 70
                     
-                print(f"--- ШАГ {self.step_count}/3: Цель {target}° ---")
+                print(f"ШАГ {self.step_count}/3: Цель {target}°")
                 await self._set_angle_180(target)
             else:
                 self.step_count = 0
-                print("--- СБРОС В 0° ---")
                 await self._set_angle_180(0)
         finally:
             self.is_moving = False 

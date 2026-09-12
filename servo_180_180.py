@@ -21,10 +21,10 @@ class servo:
         self.servo.duty_u16(duty)
     
     async def _set_angle_180(self, target_angle, hold=True):
-        # Ограничиваем угол от 0 до 180 градусов
+        #Ограничиваем угол от 0 до 180 градусов
         target_angle = int(max(0, min(180, target_angle)))
         
-        # Расчет длительности импульса
+        #Расчет длительности импульса
         pulse_us = self.min_us + (target_angle / 180) * (self.max_us - self.min_us)
         self._set_pulse(pulse_us)
         
@@ -35,7 +35,7 @@ class servo:
             self._set_pulse(0) 
     
     async def simple_angle(self):
-        """Логика для клешни: переключение между двумя позициями"""
+        #Логика для клешни (переключение между двумя позициями)
         if self.is_moving:
             return
             
@@ -44,18 +44,18 @@ class servo:
             if not hasattr(self, '_state'): self._state = False
             
             if self._state:
-                # Открываем
+                #Открываем
                 await self._set_angle_180(self.release_angle, hold=False)
                 self._state = False
             else:
-                # Закрываем и держим кубик
+                #Закрываем и держим кубик
                 await self._set_angle_180(self.hook_angle, hold=True)
                 self._state = True
         finally:
             self.is_moving = False 
     
     async def step_angle(self):
-        """Логика для руки: шаги 23, 46, 70 и сброс"""
+        #Логика для руки
         if self.is_moving:
             return
             
@@ -76,5 +76,4 @@ class servo:
             self.is_moving = False 
     
     async def set_angle(self, angle):
-        """Принудительная установка угла"""
         await self._set_angle_180(angle, hold=True)
